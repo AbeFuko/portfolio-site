@@ -8,17 +8,54 @@ const typeLabels: Record<Work["type"], string> = {
   demo: "Demo / 自主制作",
 };
 
-function WorkItem({ work, preload }: { work: Work; preload: boolean }) {
-  const preview = (
+function WorkPreviews({ work, preload }: { work: Work; preload: boolean }) {
+  const desktop = (
     <WorkPreview
+      variant="desktop"
       src={work.image}
-      alt={`${work.title} のスクリーンショット`}
+      alt={`${work.title} のデスクトップ表示`}
       address={work.address}
       width={work.imageWidth}
       height={work.imageHeight}
       preload={preload}
     />
   );
+
+  if (!work.tablet || !work.mobile) {
+    return desktop;
+  }
+
+  return (
+    <div className="flex flex-col gap-4 md:flex-row md:items-end">
+      <div className="min-w-0 w-full md:w-2/3">{desktop}</div>
+      <div className="flex w-full items-end gap-4 md:w-1/3">
+        <div className="min-w-0 flex-1">
+          <WorkPreview
+            variant="tablet"
+            src={work.tablet.src}
+            alt={`${work.title} のタブレット表示`}
+            address={work.address}
+            width={work.tablet.width}
+            height={work.tablet.height}
+          />
+        </div>
+        <div className="w-24 shrink-0 sm:w-28 md:w-32">
+          <WorkPreview
+            variant="mobile"
+            src={work.mobile.src}
+            alt={`${work.title} のスマートフォン表示`}
+            address={work.address}
+            width={work.mobile.width}
+            height={work.mobile.height}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function WorkItem({ work, preload }: { work: Work; preload: boolean }) {
+  const previews = <WorkPreviews work={work} preload={preload} />;
 
   return (
     <FadeIn>
@@ -28,12 +65,12 @@ function WorkItem({ work, preload }: { work: Work; preload: boolean }) {
             href={work.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="work-preview-trigger block"
+            className="block"
           >
-            {preview}
+            {previews}
           </a>
         ) : (
-          <div className="work-preview-trigger">{preview}</div>
+          previews
         )}
 
         <div className="mt-4">

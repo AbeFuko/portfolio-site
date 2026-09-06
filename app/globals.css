@@ -109,6 +109,14 @@
   container-type: size;
 }
 
+.work-preview-tablet {
+  aspect-ratio: 3 / 4;
+}
+
+.work-preview-mobile {
+  aspect-ratio: 9 / 16;
+}
+
 /* 100% は画像自身の高さ、100cqh は枠の高さ。差分だけ上へ送る */
 .work-preview-image {
   --preview-shift: calc(100cqh - 100%);

@@ -4,8 +4,28 @@ import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
-/** 枠(16:9)より明らかに縦長ならスクロールプレビューにする */
+/** 枠より明らかに縦長ならスクロールプレビューにする */
 const SCROLL_ASPECT_THRESHOLD = 0.8;
+
+export type PreviewVariant = "desktop" | "tablet" | "mobile";
+
+const variantLabels: Record<PreviewVariant, string> = {
+  desktop: "デスクトップ表示",
+  tablet: "タブレット表示",
+  mobile: "スマートフォン表示",
+};
+
+const variantAspect: Record<PreviewVariant, string> = {
+  desktop: "aspect-video",
+  tablet: "work-preview-tablet",
+  mobile: "work-preview-mobile",
+};
+
+const variantSizes: Record<PreviewVariant, string> = {
+  desktop: "(min-width: 1280px) 48rem, 100vw",
+  tablet: "(min-width: 768px) 16rem, 50vw",
+  mobile: "(min-width: 768px) 8rem, 6rem",
+};
 
 type WorkPreviewProps = {
   src: string;
@@ -13,6 +33,7 @@ type WorkPreviewProps = {
   address: string;
   width: number;
   height: number;
+  variant?: PreviewVariant;
   preload?: boolean;
 };
 
@@ -27,12 +48,14 @@ export function WorkPreview({
   address,
   width,
   height,
+  variant = "desktop",
   preload = false,
 }: WorkPreviewProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
   const canScroll = height / width > SCROLL_ASPECT_THRESHOLD;
   const durationSec = Math.min(20, Math.max(8, (height / width) * 4));
+  const compact = variant !== "desktop";
 
   useEffect(() => {
     if (!canScroll) return;
@@ -50,22 +73,39 @@ export function WorkPreview({
   }, [canScroll]);
 
   return (
-    <div className="overflow-hidden rounded-lg border bg-background">
-      <div className="flex items-center gap-4 border-b px-4 py-2">
-        <div className="flex gap-1" aria-hidden="true">
+    <figure className="work-preview-trigger overflow-hidden rounded-lg border bg-background">
+      <figcaption className="sr-only">{variantLabels[variant]}</figcaption>
+      <div
+        className={cn(
+          "flex items-center border-b",
+          compact ? "gap-2 px-2 py-1" : "gap-4 px-4 py-2",
+        )}
+      >
+        <div
+          className={cn("flex gap-1", variant === "mobile" && "mx-auto")}
+          aria-hidden="true"
+        >
           <span className="size-2 rounded-full bg-border" />
           <span className="size-2 rounded-full bg-border" />
           <span className="size-2 rounded-full bg-border" />
         </div>
-        <p className="min-w-0 flex-1 truncate rounded-md bg-muted px-4 py-1 text-xs text-muted-foreground">
-          {address}
-        </p>
+        {variant !== "mobile" && (
+          <p
+            className={cn(
+              "min-w-0 flex-1 truncate rounded-md bg-muted text-xs text-muted-foreground",
+              compact ? "px-2 py-1" : "px-4 py-1",
+            )}
+          >
+            {address}
+          </p>
+        )}
       </div>
 
       <div
         ref={viewportRef}
         className={cn(
-          "work-preview aspect-video overflow-hidden bg-muted",
+          "work-preview overflow-hidden bg-muted",
+          variantAspect[variant],
           canScroll && inView && "is-in-view",
         )}
         style={
@@ -80,15 +120,13 @@ export function WorkPreview({
           width={width}
           height={height}
           preload={preload}
-          sizes="(min-width: 1280px) 72rem, 100vw"
+          sizes={variantSizes[variant]}
           className={cn(
             "h-auto w-full",
-            canScroll
-              ? "work-preview-image"
-              : "object-cover object-top",
+            canScroll ? "work-preview-image" : "object-cover object-top",
           )}
         />
       </div>
-    </div>
+    </figure>
   );
 }

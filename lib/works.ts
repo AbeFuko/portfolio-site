@@ -27,6 +27,9 @@ export type Work = {
   image: string;
   imageWidth: number;
   imageHeight: number;
+  /** あると PC / iPad / スマホの3枠で見せる。端末モックではなくブラウザ枠 */
+  tablet?: { src: string; width: number; height: number };
+  mobile?: { src: string; width: number; height: number };
   tags: string[];
 };
 
@@ -60,6 +63,16 @@ export const works: Work[] = [
     image: "/works/portfolio-site.webp",
     imageWidth: 1600,
     imageHeight: 3657,
+    tablet: {
+      src: "/works/portfolio-site-tablet.webp",
+      width: 768,
+      height: 3163,
+    },
+    mobile: {
+      src: "/works/portfolio-site-mobile.webp",
+      width: 390,
+      height: 3098,
+    },
     tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
 ];
