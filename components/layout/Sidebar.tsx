@@ -2,9 +2,9 @@ import { ArrowUpRight } from "lucide-react";
 import { NavLinks } from "@/components/layout/NavLinks";
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com/" },
-  { label: "X", href: "https://x.com/" },
-  { label: "Zenn", href: "https://zenn.dev/" },
+  { label: "GitHub", href: "https://github.com/AbeFuko" },
+  { label: "X", href: "https://x.com/taidanochameko" },
+  { label: "Zenn", href: "https://zenn.dev/famaryllis" },
 ] as const;
 
 function SocialLinks() {
@@ -47,9 +47,8 @@ export function Sidebar() {
             Fuko Muto — Web Developer
           </p>
           <p className="mt-8 max-w-xs text-sm leading-loose text-muted-foreground">
-            業務管理システムの開発を長く続けてきたエンジニアです。<br />
-            デザイナーや小さな制作会社の実装パートナーとして、
-            Webサイトのコーディングと業務の自動化を請け負っています。
+            個人のWebサイト・Webアプリケーション制作者です。<br />
+            HTML/CSS実装からWordPress・Shopifyカスタマイズ、システム連携まで、気軽に相談できるパートナーを目指しています。
           </p>
           <div className="mt-8">
             <SocialLinks />

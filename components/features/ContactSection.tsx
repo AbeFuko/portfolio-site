@@ -1,7 +1,6 @@
 import { FadeIn } from "@/components/ui/FadeIn";
 
-// TODO: 実際の連絡先メールアドレスに差し替え
-const email = "hello@example.com";
+const email = "fu.amaryllis@gmail.com";
 
 /**
  * Contact セクション。フォームは置かず、メールアドレスだけを大きく示す。

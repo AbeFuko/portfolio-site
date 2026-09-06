@@ -26,14 +26,6 @@ export default function RootLayout({
       className={`${inter.variable} ${notoSansJP.variable}`}
     >
       <body className="antialiased">
-        {/* キーボード利用者向けスキップリンク(フォーカス時のみ表示) */}
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-6 focus:py-2 focus:text-sm focus:font-medium focus:ring-3 focus:ring-ring/50"
-        >
-          本文へスキップ
-        </a>
-
         {/* 左: 固定カラム(モバイルでは先頭ブロック) / 右: スクロールするコンテンツ */}
         <Sidebar />
         <main id="main" className="px-6 xl:ml-80 xl:px-16">
