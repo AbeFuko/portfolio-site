@@ -1,7 +1,10 @@
 /**
  * 実績データ。
  * 実案件を追加するときはこの配列に1件足すだけで Works セクションに反映される。
- * 画像は public/works/ に 1600x1000 目安で置く。
+ *
+ * プレビュー画像は public/works/ に置く。
+ * ホバー(タッチ端末では画面内)でページ全体を見せたい作例は、
+ * フルページの静止画(WebP)を使う。画面録画の動画は不要。
  */
 export type Work = {
   /** URL・画像ファイル名に使う識別子 */
@@ -18,8 +21,15 @@ export type Work = {
   credits?: { label: string; name: string }[];
   /** 公開URL(あれば) */
   url?: string;
-  /** public/ からのパス */
+  /** ブラウザ枠のアドレスバーに出す表示用テキスト */
+  address: string;
+  /** public/ からのパス。縦長なら枠内をスクロールして見せる */
   image: string;
+  imageWidth: number;
+  imageHeight: number;
+  /** あると PC / iPad / スマホの3枠で見せる。端末モックではなくブラウザ枠 */
+  tablet?: { src: string; width: number; height: number };
+  mobile?: { src: string; width: number; height: number };
   tags: string[];
 };
 
@@ -35,7 +45,10 @@ export const works: Work[] = [
     role: "実装(コーディング)",
     credits: [{ label: "Design", name: "(デザイナー名・敬称付き)" }],
     url: undefined,
+    address: "example.com",
     image: "/works/sample-client-site.png",
+    imageWidth: 1600,
+    imageHeight: 1000,
     tags: ["HTML/CSS", "JavaScript"],
   },
   {
@@ -46,7 +59,20 @@ export const works: Work[] = [
     description:
       "このサイト自体も自分で設計・実装しています。Next.js の静的生成で構築し、表示速度とマークアップの品質を重視しました。",
     role: "設計・実装",
-    image: "/works/portfolio-site.png",
+    address: "本サイト",
+    image: "/works/portfolio-site.webp",
+    imageWidth: 1600,
+    imageHeight: 3657,
+    tablet: {
+      src: "/works/portfolio-site-tablet.webp",
+      width: 768,
+      height: 3163,
+    },
+    mobile: {
+      src: "/works/portfolio-site-mobile.webp",
+      width: 390,
+      height: 3098,
+    },
     tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
 ];

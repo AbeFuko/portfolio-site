@@ -98,3 +98,55 @@
     @apply font-sans;
   }
 }
+
+/*
+  Works の縦長スクショを、ブラウザ枠の中でページ送りするように見せる。
+  transform だけを動かすのでデコード負荷は動画より小さい。
+  タッチ端末では画面内に入っているときだけ往復させる。
+*/
+.work-preview {
+  --preview-duration: 12s;
+  container-type: size;
+}
+
+.work-preview-tablet {
+  aspect-ratio: 3 / 4;
+}
+
+.work-preview-mobile {
+  aspect-ratio: 9 / 16;
+}
+
+/* 100% は画像自身の高さ、100cqh は枠の高さ。差分だけ上へ送る */
+.work-preview-image {
+  --preview-shift: calc(100cqh - 100%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @media (hover: hover) and (pointer: fine) {
+    .work-preview-image {
+      transition: transform var(--preview-duration) linear;
+    }
+
+    .work-preview-trigger:hover .work-preview-image,
+    .work-preview-trigger:focus-within .work-preview-image {
+      transform: translateY(var(--preview-shift));
+    }
+  }
+
+  @media (hover: none) {
+    .work-preview.is-in-view .work-preview-image {
+      animation: work-preview-scroll var(--preview-duration) ease-in-out
+        infinite alternate;
+    }
+  }
+}
+
+@keyframes work-preview-scroll {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(var(--preview-shift));
+  }
+}
