@@ -1,0 +1,45 @@
+---
+description: 余白とフォントウェイトのデザインシステム。セクション・要素間の間隔と見出しの太さを拘束する。
+globs: "**/*.{tsx,jsx,css}"
+alwaysApply: false
+---
+
+# Design System
+
+Tailwind のデフォルト spacing（4px / 0.25rem 刻み）を使う。スケールの再定義や任意値はしない。
+
+## Spacing
+
+余白は次の段階から選ぶ。中間値（`py-20` / `mt-5` / `gap-3` など）や任意値（`p-[26px]`）は使わない。
+
+| 用途 | 許可クラス |
+|---|---|
+| セクションの上下余白 | `py-24`（96px）。広い画面は `lg:py-32`（128px） |
+| セクション内の大きな区切り（小見出しブロックなど） | `mt-16`（64px） |
+| ブロックの区切り（紹介文とリンク群の間など） | `mt-8`（32px） |
+| 段落同士 / リスト項目同士 | `space-y-6`（24px）/ `space-y-2`（8px） |
+| 見出しと本文など近い要素の間隔 | `mt-4` / `gap-4`（16px） |
+
+```tsx
+// ❌
+<section className="py-20">
+  <h2 className="font-bold mb-5">Works</h2>
+  <p className="mt-[22px]">...</p>
+</section>
+
+// ✅
+<section className="py-24 lg:py-32">
+  <h2 className="font-semibold">Works</h2>
+  <p className="mt-4">...</p>
+</section>
+```
+
+- `p-[18px]`、`mt-[22px]`、`gap-[14px]` などの任意値は禁止。
+- 片側だけ必要なときは同じスケールを使う（`pt-24` / `px-6` / `py-8`）。
+- カード・枠・アイコン装飾は使わない。区切りは余白と `border-t` / `border-b` の細線で作る。
+- shadcn コンポーネントを追加した場合、その内部は例外。自分で書くページ・セクションでは上表を守る。
+
+## Type
+
+- 見出しは `font-bold` / `font-extrabold` を使わない。`font-semibold` または `font-medium` にする。
+- Inter / Noto Sans JP の端正さとテラコッタ（プライマリー）の穏やかさに合わせ、ウェイトで主張しすぎない。

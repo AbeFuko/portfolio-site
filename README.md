@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# portfolio-site
 
-## Getting Started
+武藤楓子のポートフォリオサイトです。デザイナー・制作会社の実装パートナーとして、Webサイトのコーディングと業務の自動化を請け負っています。
 
-First, run the development server:
+本サイト自体も実績の一つとして、設計・実装の品質をそのまま見ていただける状態を目指しています。
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- 公開URL: (準備中)
+
+> **Status:** 現在はモック段階です。実績データ・画像・各種リンクはプレースホルダを使用しています。
+
+## 技術スタック
+
+| 分類 | 採用技術 |
+|---|---|
+| フレームワーク | Next.js 16(App Router / Turbopack)+ TypeScript |
+| スタイリング | Tailwind CSS v4 |
+| アニメーション | Framer Motion |
+| UI基盤 | shadcn(必要になったコンポーネントのみ追加する方針) |
+| フォント | Inter / Noto Sans JP(next/font) |
+| ホスティング | Vercel(予定) |
+
+## 設計のポイント
+
+### パフォーマンス
+
+- 全ページを静的生成(SSG)。Client Component はアニメーションとページ内ナビゲーションの2箇所に限定し、クライアントに送る JavaScript を最小化しています。
+- 画像は `next/image` で最適化(WebP変換・遅延読み込み・レイアウトシフト防止)。ファーストビューの実績画像のみ `priority` を指定し、LCP を確保しています。
+
+### アクセシビリティ
+
+- セマンティックなHTML(`header` / `nav` / `main` / `section` / `footer`)と適切な見出し階層。
+- キーボード操作対応: スキップリンク、フォーカスリングの維持。
+- ナビゲーションには `aria-label` を付与。装飾アイコンは `aria-hidden` で読み上げ対象から除外しています。
+
+### レスポンシブ
+
+- PC(1280px〜): 左固定のサイドバー + 右スクロールの本文という2カラム構成。
+- iPad / スマートフォン: サイドバーを上部の sticky ヘッダーと紹介ブロックに再構成。
+- 画面の縦幅が小さい環境でもサイドバー内にスクロールが発生しないよう、余白を `min-height` ベースのカスタムバリアントで調整しています。
+
+### デザインシステム
+
+余白(4px刻みのスケールのみ・任意値禁止)とフォントウェイトのルールを [`.cursor/rules/design-system.mdc`](.cursor/rules/design-system.mdc) に定義し、実装がぶれないようにしています。カード・枠・アイコン装飾は使わず、余白とタイポグラフィで構成しています。
+
+## ディレクトリ構成
+
+```
+app/                  ルートレイアウト・ページ・グローバルCSS
+components/
+  layout/             サイドバー・ナビゲーションなどサイト全体のクロム
+  features/           Works / About / Contact の各セクション
+  ui/                 汎用UI(スクロール連動のFadeInなど)
+lib/                  実績データの型定義とデータ本体
+public/works/         実績のスクリーンショット画像
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+実績の追加・更新は `lib/works.ts` の配列を編集するだけで完結します。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 開発
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm install
+npm run dev     # 開発サーバー (http://localhost:3000)
+npm run build   # 本番ビルド
+npm run lint    # ESLint
+```
 
-## Learn More
+## 今後の予定
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] 実案件の実績データ・スクリーンショットへの差し替え
+- [ ] GitHub / X / Zenn の各リンク先の設定
+- [ ] 問い合わせ用メールアドレスの設定
+- [ ] Vercel へのデプロイと独自ドメインの設定
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+&copy; Fuko Muto
