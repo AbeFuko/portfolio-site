@@ -1,38 +1,39 @@
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { works, type Work } from "@/lib/works";
 import { FadeIn } from "@/components/ui/FadeIn";
+import { WorkPreview } from "@/components/features/WorkPreview";
 
 const typeLabels: Record<Work["type"], string> = {
   client: "Client Work",
   demo: "Demo / 自主制作",
 };
 
-function WorkItem({ work, priority }: { work: Work; priority: boolean }) {
-  const image = (
-    <div className="overflow-hidden bg-muted">
-      <Image
-        src={work.image}
-        alt={`${work.title} のスクリーンショット`}
-        width={1600}
-        height={1000}
-        // 先頭の実績画像はファーストビュー(LCP)なので優先読み込みする
-        priority={priority}
-        className="h-auto w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.02]"
-      />
-    </div>
+function WorkItem({ work, preload }: { work: Work; preload: boolean }) {
+  const preview = (
+    <WorkPreview
+      src={work.image}
+      alt={`${work.title} のスクリーンショット`}
+      address={work.address}
+      width={work.imageWidth}
+      height={work.imageHeight}
+      preload={preload}
+    />
   );
 
   return (
     <FadeIn>
       <article className="group">
-        {/* 公開URLがあれば画像ごとリンクにする */}
         {work.url ? (
-          <a href={work.url} target="_blank" rel="noopener noreferrer">
-            {image}
+          <a
+            href={work.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="work-preview-trigger block"
+          >
+            {preview}
           </a>
         ) : (
-          image
+          <div className="work-preview-trigger">{preview}</div>
         )}
 
         <div className="mt-4">
@@ -86,7 +87,7 @@ export function WorksSection() {
     <section id="works" aria-label="制作実績" className="py-24 lg:py-32">
       <div className="flex flex-col gap-24">
         {works.map((work, index) => (
-          <WorkItem key={work.slug} work={work} priority={index === 0} />
+          <WorkItem key={work.slug} work={work} preload={index === 0} />
         ))}
       </div>
     </section>
