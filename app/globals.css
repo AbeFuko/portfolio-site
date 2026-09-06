@@ -126,7 +126,7 @@
     }
   }
 
-  @media (hover: none), (pointer: coarse) {
+  @media (hover: none) {
     .work-preview.is-in-view .work-preview-image {
       animation: work-preview-scroll var(--preview-duration) ease-in-out
         infinite alternate;
