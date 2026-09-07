@@ -1,8 +1,22 @@
 /**
  * 実績データ。
  * 実案件を追加するときはこの配列に1件足すだけで Works セクションに反映される。
- * 画像は public/works/ に 1600x1000 目安で置く。
+ *
+ * cover: 一覧用。PC幅で撮ったトップのスクショ。枠は付けない。
+ * slides: モーダル用。フルページ静止画をブラウザ枠に入れてホバーでなぞる。
  */
+export type WorkImage = {
+  src: string;
+  width: number;
+  height: number;
+};
+
+export type WorkSlideVariant = "desktop" | "tablet" | "mobile";
+
+export type WorkSlide = WorkImage & {
+  variant: WorkSlideVariant;
+};
+
 export type Work = {
   /** URL・画像ファイル名に使う識別子 */
   slug: string;
@@ -18,9 +32,24 @@ export type Work = {
   credits?: { label: string; name: string }[];
   /** 公開URL(あれば) */
   url?: string;
-  /** public/ からのパス */
-  image: string;
+  /** ブラウザ枠のアドレスバーに出す表示用テキスト */
+  address: string;
+  /** 一覧用。PCトップのスクショ */
+  cover: WorkImage;
+  /** モーダル内のスライド */
+  slides: WorkSlide[];
   tags: string[];
+};
+
+export const workTypeLabels: Record<Work["type"], string> = {
+  client: "Client Work",
+  demo: "Demo / 自主制作",
+};
+
+export const workSlideLabels: Record<WorkSlideVariant, string> = {
+  desktop: "PC",
+  tablet: "iPad",
+  mobile: "SP",
 };
 
 export const works: Work[] = [
@@ -35,7 +64,20 @@ export const works: Work[] = [
     role: "実装(コーディング)",
     credits: [{ label: "Design", name: "(デザイナー名・敬称付き)" }],
     url: undefined,
-    image: "/works/sample-client-site.png",
+    address: "example.com",
+    cover: {
+      src: "/works/sample-client-site.png",
+      width: 1600,
+      height: 1000,
+    },
+    slides: [
+      {
+        variant: "desktop",
+        src: "/works/sample-client-site.png",
+        width: 1600,
+        height: 1000,
+      },
+    ],
     tags: ["HTML/CSS", "JavaScript"],
   },
   {
@@ -46,7 +88,32 @@ export const works: Work[] = [
     description:
       "このサイト自体も自分で設計・実装しています。Next.js の静的生成で構築し、表示速度とマークアップの品質を重視しました。",
     role: "設計・実装",
-    image: "/works/portfolio-site.png",
+    address: "本サイト",
+    cover: {
+      src: "/works/portfolio-site-cover.webp",
+      width: 1600,
+      height: 1000,
+    },
+    slides: [
+      {
+        variant: "desktop",
+        src: "/works/portfolio-site.webp",
+        width: 1600,
+        height: 3701,
+      },
+      {
+        variant: "tablet",
+        src: "/works/portfolio-site-tablet.webp",
+        width: 768,
+        height: 3169,
+      },
+      {
+        variant: "mobile",
+        src: "/works/portfolio-site-mobile.webp",
+        width: 390,
+        height: 3057,
+      },
+    ],
     tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
 ];
