@@ -98,3 +98,11 @@
     @apply font-sans;
   }
 }
+
+.work-frame-tablet {
+  aspect-ratio: 3 / 4;
+}
+
+.work-frame-mobile {
+  aspect-ratio: 9 / 16;
+}

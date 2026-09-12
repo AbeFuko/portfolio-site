@@ -1,8 +1,18 @@
-/**
- * 実績データ。
- * 実案件を追加するときはこの配列に1件足すだけで Works セクションに反映される。
- * 画像は public/works/ に 1600x1000 目安で置く。
- */
+/** public/ から参照する画像 */
+export type WorkImage = {
+  src: string;
+  width: number;
+  height: number;
+};
+
+/** 動き自体を見せたい案件だけ追加する動画 */
+export type WorkMotion = {
+  src: string;
+  type: "video/webm" | "video/mp4";
+  poster: string;
+  title: string;
+};
+
 export type Work = {
   /** URL・画像ファイル名に使う識別子 */
   slug: string;
@@ -18,9 +28,22 @@ export type Work = {
   credits?: { label: string; name: string }[];
   /** 公開URL(あれば) */
   url?: string;
-  /** public/ からのパス */
-  image: string;
+  /** 一覧に表示する、枠なしのPCトップ画像 */
+  cover: WorkImage;
+  /** 詳細ページのブラウザ枠に表示する各レスポンシブ画像 */
+  screens: {
+    desktop: WorkImage;
+    tablet?: WorkImage;
+    mobile?: WorkImage;
+  };
+  /** 任意。ページ内の動きや操作感を紹介する手動再生動画 */
+  motion?: WorkMotion[];
   tags: string[];
+};
+
+export const workTypeLabels: Record<Work["type"], string> = {
+  client: "Client Work",
+  demo: "Demo / 自主制作",
 };
 
 export const works: Work[] = [
@@ -35,7 +58,18 @@ export const works: Work[] = [
     role: "実装(コーディング)",
     credits: [{ label: "Design", name: "(デザイナー名・敬称付き)" }],
     url: undefined,
-    image: "/works/sample-client-site.png",
+    cover: {
+      src: "/works/sample-client-site.png",
+      width: 1600,
+      height: 1000,
+    },
+    screens: {
+      desktop: {
+        src: "/works/sample-client-site.png",
+        width: 1600,
+        height: 1000,
+      },
+    },
     tags: ["HTML/CSS", "JavaScript"],
   },
   {
@@ -46,7 +80,32 @@ export const works: Work[] = [
     description:
       "このサイト自体も自分で設計・実装しています。Next.js の静的生成で構築し、表示速度とマークアップの品質を重視しました。",
     role: "設計・実装",
-    image: "/works/portfolio-site.png",
+    cover: {
+      src: "/works/portfolio-site-cover.webp",
+      width: 1600,
+      height: 1000,
+    },
+    screens: {
+      desktop: {
+        src: "/works/portfolio-site.webp",
+        width: 1600,
+        height: 3701,
+      },
+      tablet: {
+        src: "/works/portfolio-site-tablet.webp",
+        width: 768,
+        height: 3169,
+      },
+      mobile: {
+        src: "/works/portfolio-site-mobile.webp",
+        width: 390,
+        height: 3057,
+      },
+    },
     tags: ["Next.js", "Tailwind CSS", "Framer Motion"],
   },
 ];
+
+export function getWork(slug: string) {
+  return works.find((work) => work.slug === slug);
+}
