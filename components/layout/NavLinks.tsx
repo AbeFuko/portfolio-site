@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
 const navItems = [
   { id: "works", label: "Works" },
   { id: "about", label: "About" },
@@ -12,9 +14,14 @@ const navItems = [
  * 文書座標を計算して window.scrollTo する。
  */
 export function NavLinks({ className }: { className: string }) {
+  const router = useRouter();
+
   function goTo(id: string) {
     const target = document.getElementById(id);
-    if (!target) return;
+    if (!target) {
+      router.push(`/#${id}`);
+      return;
+    }
 
     // iPad/SP の上部 sticky ヘッダーのぶんだけずらす。
     // PC の左固定カラム(position: fixed)は上部を覆わないので対象外。
